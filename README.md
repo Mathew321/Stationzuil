@@ -1,6 +1,4 @@
 <h1>README</h1>
-
-<h2>Stationzuil Application</h2>
     
 <h3>Introduction</h3>
 <p>
