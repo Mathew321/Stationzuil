@@ -1,6 +1,8 @@
-<h1>Stationzuil Application</h1>
+<h1>README</h1>
+
+<h2>Stationzuil Application</h2>
     
-<h2>Introduction<h2>
+<h3>Introduction<h3>
 <p>
 The Stationzuil application is a Python GUI program built using the Tkinter library. It allows users to log in and post messages related to different train stations. There is also an administrative panel for moderators to review and manage the posted messages. This README file provides an overview of the code structure and functionality.
 </p>
@@ -27,7 +29,7 @@ The data_manipulation function connects to a PostgreSQL database, executes SQL q
 <p>
 The code defines the structure and layout of the GUI. It includes login screens, the main user interface, and the admin interface. Key elements include labels, entry fields, buttons, and message display areas.
 </p>
-<3>Functionality</h3>
+<h3>Functionality</h3>
 <p>
 The code contains functions for user login, sending messages, checking message contents, and displaying messages. There are separate functions for reading and writing messages to CSV files. The admin panel allows moderators to review and delete messages.
 </p>
@@ -35,24 +37,27 @@ The code contains functions for user login, sending messages, checking message c
 <p>
 The application enters the main event loop with root.mainloop(), allowing user interactions and GUI updates.
 </p>
+<HR>
 <h3>How to Use</h3>
 <p>
 Run the code, and the initial login screen will appear.
 Enter valid login credentials (username and password) to access the main interface.
-<p>
-    To log in you can use:<br>
-<br>
-        username: Leraar (Uppercase and lowercase are accapted)<br>
-        password: leraar (Needs to be lowercase)<br>
-<br>
-    Or to log in as admin you can use:<br>
-<br>
-        username: Admin (Uppercase and lowercase are accepted)<br>
+<PRE>
+    To log in you can use:
+
+        username: Leraar (Uppercase and lowercase are accapted)
+        password: leraar (Needs to be lowercase)
+
+    Or to log in as admin you can use:
+
+        username: Admin (Uppercase and lowercase are accepted)
         password: admin (Needs to be lowercase)
-</p>
-In the main interface, you can select a station, enter a name, and type a message before clicking "Enter" to send a message.
+
+</PRE>
+In the main interface, you can select a station, enter a name (if you don't type a name, you will send a message with the name 'Anonymous'), and type a message before clicking "Enter" to send a message.
 The admin panel allows moderators to review messages, delete them, and send pending messages to the database.
 </p>
+<HR>
 <h3>Dependencies</h3>
 <p>
 Tkinter: The code uses the Tkinter library for building the graphical user interface.
@@ -69,11 +74,11 @@ This code structure assumes that you have a PostgreSQL database set up and runni
 </p>
 <h4>Author</h4>
 <p>
-[MrJackRegen]
+MrJackRegen
 </p>
 <h4>Contact</h4>
 <p>
-For questions or support, please contact [fake.email@gmail.com] (Do not contact me!).
+For questions or support, please contact fake.email@gmail.com (Do not contact me!).
 </p>
 <h3>Acknowledgments</h3>
 <p>
