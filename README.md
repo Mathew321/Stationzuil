@@ -2,7 +2,7 @@
 
 <h2>Stationzuil Application</h2>
     
-<h3>Introduction<h3>
+<h3>Introduction</h3>
 <p>
 The Stationzuil application is a Python GUI program built using the Tkinter library. It allows users to log in and post messages related to different train stations. There is also an administrative panel for moderators to review and manage the posted messages. This README file provides an overview of the code structure and functionality.
 </p>
@@ -52,7 +52,6 @@ Enter valid login credentials (username and password) to access the main interfa
 
         username: Admin (Uppercase and lowercase are accepted)
         password: admin (Needs to be lowercase)
-
 </PRE>
 In the main interface, you can select a station, enter a name (if you don't type a name, you will send a message with the name 'Anonymous'), and type a message before clicking "Enter" to send a message.
 The admin panel allows moderators to review messages, delete them, and send pending messages to the database.
