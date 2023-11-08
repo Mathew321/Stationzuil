@@ -44,20 +44,20 @@ def data_manipulation(operation):
         cur = conn.cursor()
 
         # Fetch login records
-        if operation == 0:
+        if operation == "listOptions":
             cur.execute("""SELECT station_city FROM station_service;""")
             listOfRecords = []
             for record in cur.fetchall():
                 listOfRecords.append(record[0])
             return listOfRecords
-        elif operation == 1:
+        elif operation == "listGebruikers":
             script = """SELECT * FROM gebruiker;"""
             cur.execute(script)
             listOfRecords = []
             for record in cur.fetchall():
                 listOfRecords.append(record)
             return listOfRecords
-        elif operation == 2:
+        elif operation == "sendData":
             List = []
             with open("Stationzuil/berichten.csv", "r") as file:
                 lines = file.readlines()
@@ -86,7 +86,7 @@ def data_manipulation(operation):
             insert_script = 'INSERT INTO messages VALUES (%s, %s, %s, %s, %s);'
             for record in List:
                 cur.execute(insert_script, record)
-        elif operation == 3:
+        elif operation == "fetchMessages":
             cur.execute("SELECT * FROM messages WHERE goedgekeurd = 'yes';")
             table = cur.fetchall()# TODO You should fetch records and Datetime.datetime is weird man bro ik zweer jou!
             list(table)
@@ -95,6 +95,25 @@ def data_manipulation(operation):
             for item in table:
                 item[3] = item[3].strftime('%Y-%m-%d %H:%M:%S')
             return table
+        elif operation == "fetchFaciliteiten":
+            cur.execute("""SELECT * FROM station_service;""")
+            List = []
+            for record in cur.fetchall():
+                List.append(list(record))
+            newList = []
+            for faciliteiten in List:
+                if faciliteiten[0] == optionMenuText.get():
+                    newList.append(faciliteiten[2])
+                    newList.append(faciliteiten[3])
+                    newList.append(faciliteiten[4])
+                    newList.append(faciliteiten[5])
+            for i in range(0, len(newList)):
+                if newList[i]:
+                    newList[i] = "Beschrikbaar"
+                else:
+                    newList[i] = "Niet beschrikbaar"
+            return newList
+
 
         conn.commit()
     except Exception as error:
@@ -104,7 +123,7 @@ def data_manipulation(operation):
             cur.close()
         if conn is not None:
             conn.close()
-options = data_manipulation(0)
+options = data_manipulation("listOptions")
 
 def make_visable(widget):
    widget.pack()
@@ -131,7 +150,8 @@ def toggle_moderator_panel(invisable, visable):
     visable.grid(row=1)
 
 def check_credentials(usrInput, pswInput):
-    List = data_manipulation(1)
+    faciliteiten.config(text="Ov-fietsen:\nLift:\nToilet:\nPark & ride:")
+    List = data_manipulation("listGebruikers")
     for i in range(0, len(List)):
         if usrInput.lower() == List[i][0].strip(' '):
             if pswInput == List[i][1].strip(' '):
@@ -181,35 +201,33 @@ def file_reader():
 
 def delete_line(item):
     text = item[0] + ";" + item[1] + ";" + item[2] + ";" + item[3] + "\n"
-    text1 = item[0] + ";" + item[1] + ";" + item[2] + ";" + item[3]
-    
+    print(item)
+
     with open('Stationzuil/berichten.csv', "r") as file:
         lines = file.readlines()
-        savedLine = ""
 
     with open('Stationzuil/gemodereerde_berichten.csv', "a+") as file:
         for line in lines:
             if line == text:
                 file.write(text)
-        if lines[-1] == text1:
-            file.write(text)
 
     with open('Stationzuil/berichten.csv', "w") as file:
         for line in lines:
-            if line != text and line != text1:
+            if line != text:
                 file.write(line)
 
-def print_message(event):
+def print_messages(event):
     frame_clearing()
+    faciliteitenList = data_manipulation("fetchFaciliteiten")
+    faciliteiten.config(text=f"Ov-fietsen: {faciliteitenList[0]}\nLift: {faciliteitenList[1]}\nToilet: {faciliteitenList[2]}\nPark & ride: {faciliteitenList[3]}")
     if adminFrame.winfo_ismapped():
         result = file_reader()
     elif not adminFrame.winfo_ismapped():
-        result = data_manipulation(3)
-    print(result)
+        result = data_manipulation("fetchMessages")
     List = []
     line = 0
     for item in result:
-        if item[1].strip() == optionMenuText.get():
+        if item[1] == optionMenuText.get():
             List.append(item)
     for item in List:
         # Name label
@@ -268,7 +286,7 @@ loginButton.pack(pady=20)
 # --------- Main page content (user) -------- #
 # Messagebox init
 message_container = tk.Frame(mainScreen, bg="#C0C0C0")
-message_container.columnconfigure(0, weight=1)
+message_container.columnconfigure(0, weight=20)
 message_container.columnconfigure(1, weight=1)
 message_container.rowconfigure(0, weight=1)
 message_container.rowconfigure(1, weight=1)
@@ -282,31 +300,46 @@ message_container.grid(row=0, sticky="news")
 
 # Messege Input Frame
 messageInputFrame = tk.Frame(mainScreen)
+messageInputFrame.rowconfigure(0, weight=1)
+messageInputFrame.rowconfigure(1, weight=1)
+messageInputFrame.rowconfigure(2, weight=1)
+messageInputFrame.rowconfigure(3, weight=1)
+messageInputFrame.columnconfigure(0, weight=2)
+messageInputFrame.columnconfigure(1, weight=1)
+messageInputFrame.columnconfigure(2, weight=1)
+messageInputFrame.columnconfigure(3, weight=1)
+messageInputFrame.columnconfigure(4, weight=2)
 messageInputFrame.grid(row=1)
 
 # Name label
 nameLabel = tk.Label(messageInputFrame, text="Name")
-nameLabel.grid(row=0, column=0)
+nameLabel.grid(row=0, column=1)
 
 # Name entry
 nameEntry = tk.Entry(messageInputFrame)
-nameEntry.grid(row=0, column=1)
+nameEntry.grid(row=0, column=2)
 
 # Option menu station
-optionMenu = tk.OptionMenu(messageInputFrame, optionMenuText, *options, command=print_message)
-optionMenu.grid(row=0, column=4)
+optionMenu = tk.OptionMenu(messageInputFrame, optionMenuText, *options, command=print_messages)
+optionMenu.grid(row=0, column=3)
 
 # Messagebar
 messagebar = tk.Entry(messageInputFrame)
-messagebar.grid(row=1, column=0, sticky="ew", columnspan=6)
+messagebar.grid(row=1, column=1, sticky="ew", columnspan=3)
 
 # Enterbutton
 enterButton = tk.Button(messageInputFrame, text="Enter", width=4, height=1, font=('Arial', 16), command=check_message_contents)
-enterButton.grid(row=2, column=0, columnspan=6)
+enterButton.grid(row=2, column=1, columnspan=3)
 
 # Logout button init
 logoutButton = tk.Button(messageInputFrame, text="Logout", width=4, height=1, font=('Arial', 16), command=lambda:change_screen(mainScreen, loginScreen))
-logoutButton.grid(row=3, column=0, columnspan=6)
+logoutButton.grid(row=3, column=1, columnspan=3)
+
+faciliteiten = tk.Label(messageInputFrame, text="Ov-fietsen:\nLift:\nToilet:\nPark & ride:", width=50)
+faciliteiten.grid(row=0, column=0, rowspan=4, sticky="w")
+
+dummyLabel = tk.Label(messageInputFrame, text="",width=50)
+dummyLabel.grid(row=0, column=4, rowspan=4, sticky="e")
 
 # -------- Main page content (admin) -------- #
 adminFrame = tk.Frame(mainScreen)
@@ -316,13 +349,13 @@ adminFrame.rowconfigure(2, weight=1)
 adminFrame.rowconfigure(3, weight=1)
 adminFrame.grid(row=1)
 
-optionMenu1 = tk.OptionMenu(adminFrame, optionMenuText, *options, command=print_message)
+optionMenu1 = tk.OptionMenu(adminFrame, optionMenuText, *options, command=print_messages)
 optionMenu1.grid(row=0)
 
-reloadButton = tk.Button(adminFrame, text="Reload", width=10, height=1, command=lambda:print_message(event))
+reloadButton = tk.Button(adminFrame, text="Reload", width=10, height=1, command=lambda:print_messages(event))
 reloadButton.grid(row=1)
 
-sendDataButton = tk.Button(adminFrame, text="Send messages", width=10, height=1, command=lambda:data_manipulation(2))
+sendDataButton = tk.Button(adminFrame, text="Send messages", width=10, height=1, command=lambda:data_manipulation("sendData"))
 sendDataButton.grid(row=2)
 
 logoutButton1 = tk.Button(adminFrame, text="Logout", width=4, height=1, command=lambda:change_screen(mainScreen, loginScreen))
