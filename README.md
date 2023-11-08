@@ -42,16 +42,17 @@ The application enters the main event loop with root.mainloop(), allowing user i
 <p>
 Run the code, and the initial login screen will appear.
 Enter valid login credentials (username and password) to access the main interface.
+</p>
+<p>To log in you can use:</p>
 <PRE>
-    To log in you can use:
-
-        username: Leraar (Uppercase and lowercase are accapted)
-        password: leraar (Needs to be lowercase)
-
-        Or to log in as admin you can use:
-
-        username: Admin (Uppercase and lowercase are accepted)
-        password: admin (Needs to be lowercase)</PRE>
+    username: Leraar (Uppercase and lowercase are accapted)
+    password: leraar (Needs to be lowercase)
+</PRE>
+<p>Or to log in as admin you can use:</p>
+<PRE>
+    username: Admin (Uppercase and lowercase are accepted)
+    password: admin (Needs to be lowercase)</PRE>
+</p>
 In the main interface, you can select a station, enter a name (if you don't type a name, you will send a message with the name 'Anonymous'), and type a message before clicking "Enter" to send a message.
 The admin panel allows moderators to review messages, delete them, and send pending messages to the database.
 </p>
